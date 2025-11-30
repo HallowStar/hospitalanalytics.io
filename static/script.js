@@ -305,7 +305,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .split(",")
       .map((h) => h.trim().replace(/['']/g, ""));
     if (currentDataHeaders[0] === "") {
-      currentDataHeaders[0] = "Row #";
+      currentDataHeaders[0] = "No";
     }
 
     // 2. Store data and populate unique conditions
