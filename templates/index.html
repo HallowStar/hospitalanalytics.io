@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hospital Analytics Dashboard</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body class="show-upload">
+    <div class="dashboard">
+      <header class="dashboard-header">
+        <div class="logo">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.58 20 4 16.42 4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12C20 16.42 16.42 20 12 20ZM12 6C10.9 6 10 6.9 10 8V16C10 17.1 10.9 18 12 18C13.1 18 14 17.1 14 16V8C14 6.9 13.1 6 12 6ZM12 14C11.45 14 11 13.55 11 13V9C11 8.45 11.45 8 12 8C12.55 8 13 8.45 13 9V13C13 13.55 12.55 14 12 14Z"
+              fill="#1ABC9C"
+            />
+          </svg>
+          Hospital Analytics
+        </div>
+        <div class="subtitle">Billing & Stay Prediction Dashboard</div>
+      </header>
+
+      <main class="dashboard-content">
+        <div class="upload-state">
+          <div class="file-area">
+            <div class="file-input-box upload-content">
+              <svg
+                class="upload-icon"
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2v9.67z"
+                />
+              </svg>
+              <p><strong>Drop your CSV file here</strong></p>
+              <p>or click to browse</p>
+              <small>Supports .csv files with hospital billing data</small>
+              <input type="file" id="csvFile" hidden />
+            </div>
+
+            <div class="loading-content hidden">
+              <div class="spinner"></div>
+              <p>Processing data and generating analytics...</p>
+            </div>
+          </div>
+
+          <div class="state-tabs upload-tabs-position">
+            <button class="tab" data-tab="analytics">Analytics</button>
+            <button class="tab" data-tab="data-table">Data Table</button>
+            <button class="tab" data-tab="prediction">Prediction</button>
+          </div>
+
+          <div class="data-divider"></div>
+
+          <div class="upload-prompt">
+            <p>Upload a CSV file to revolutionize your hospital's insights!</p>
+            <!-- <img
+              src="."
+              alt="Hospital data visualization concept"
+              class="dashboard-concept-image"
+            /> -->
+            <p class="image-caption">
+              Gain powerful insights and predict patient stays.
+            </p>
+          </div>
+        </div>
+
+        <div class="analytics-state">
+          <div class="state-tabs analytics-tabs-position">
+            <button class="tab active" data-tab="analytics">Analytics</button>
+            <button class="tab" data-tab="data-table">Data Table</button>
+            <button class="tab" data-tab="prediction">Prediction</button>
+          </div>
+
+          <div class="file-loaded-banner">
+            <svg width="20" height="20" viewBox="0 0 24 24">
+              <path
+                d="M14 2H6C4.9 2 4 2.9 4 4v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"
+              />
+            </svg>
+            <strong>Healthcare.csv</strong>
+            <span id="recordCountDisplay">55,500 records loaded</span>
+            <button class="close-banner">x</button>
+          </div>
+
+          <div id="analytics-content" class="tab-content active-content">
+            <div class="key-metrics-row">
+              <div class="metric-card">
+                <div class="title">Total Billing</div>
+                <div class="value-row">
+                  <span class="value">$1417.4M</span>
+                  <span class="icon-circle dollar">$</span>
+                </div>
+                <div class="detail">55,500 patients</div>
+              </div>
+
+              <div class="metric-card">
+                <div class="title">Average Bill</div>
+                <div class="value-row">
+                  <span class="value">$25.5K</span>
+                  <span class="icon-circle person">🧑‍💻</span>
+                </div>
+                <div class="detail">Per patient</div>
+              </div>
+
+              <div class="metric-card">
+                <div class="title">Total Doctors</div>
+                <div class="value-row">
+                  <span class="value">6</span>
+                  <span class="icon-circle doctor">🩺</span>
+                </div>
+                <div class="detail">In dataset</div>
+              </div>
+
+              <div class="metric-card">
+                <div class="title">Total Hospitals</div>
+                <div class="value-row">
+                  <span class="value">150</span>
+                  <span class="icon-circle doctor">🏥</span>
+                </div>
+                <div class="detail">In dataset</div>
+              </div>
+            </div>
+
+            <div class="charts-grid">
+              <div class="chart-card">
+                <div class="chart-title">Average Billing by Gender</div>
+                <div class="chart-placeholder bar-gender"></div>
+              </div>
+              <div class="chart-card">
+                <div class="chart-title">Average Billing by Age Group</div>
+                <div class="chart-placeholder area-age"></div>
+              </div>
+              <div class="chart-card">
+                <div class="chart-title">
+                  Average Billing by Medical Condition
+                </div>
+                <div class="chart-placeholder bar-condition"></div>
+              </div>
+              <div class="chart-card">
+                <div class="chart-title">Top Doctors by Total Billing</div>
+                <div class="chart-placeholder bar-doctors"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="data-table-content" class="tab-content hidden-content">
+            <h2 style="padding: 20px 0 10px">Cleaned Patient Data</h2>
+
+            <div
+              class="multi-filter-container"
+              style="
+                padding-bottom: 15px;
+                border-bottom: 1px solid #eee;
+                margin-bottom: 15px;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  gap: 15px;
+                  flex-wrap: wrap;
+                  align-items: flex-end;
+                "
+              >
+                <div>
+                  <label
+                    for="filterDoctor"
+                    style="font-size: 0.9em; color: #666"
+                    >Doctor:</label
+                  >
+                  <input
+                    type="text"
+                    id="filterDoctor"
+                    placeholder="Dr. Smith"
+                    style="
+                      padding: 8px;
+                      border: 1px solid #ccc;
+                      border-radius: 4px;
+                      width: 150px;
+                    "
+                  />
+                </div>
+
+                <div>
+                  <label
+                    for="filterMinAge"
+                    style="font-size: 0.9em; color: #666"
+                    >Min Age:</label
+                  >
+                  <input
+                    type="number"
+                    id="filterMinAge"
+                    min="0"
+                    placeholder="0"
+                    style="
+                      padding: 8px;
+                      border: 1px solid #ccc;
+                      border-radius: 4px;
+                      width: 80px;
+                    "
+                  />
+                </div>
+
+                <div>
+                  <label
+                    for="filterCondition"
+                    style="font-size: 0.9em; color: #666"
+                    >Condition:</label
+                  >
+                  <input
+                    type="text"
+                    id="filterCondition"
+                    placeholder="Cancer"
+                    style="
+                      padding: 8px;
+                      border: 1px solid #ccc;
+                      border-radius: 4px;
+                      width: 150px;
+                    "
+                  />
+                </div>
+
+                <button
+                  id="applyFilterButton"
+                  style="
+                    padding: 8px 15px;
+                    background-color: var(--primary-color);
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                  "
+                >
+                  Apply Filters
+                </button>
+                <button
+                  id="resetFilterButton"
+                  style="
+                    padding: 8px 15px;
+                    background-color: #ccc;
+                    color: #333;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                  "
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+
+            <div class="search-container">
+              <div class="search-wrapper">
+                <input
+                  type="text"
+                  id="tableSearchInput"
+                  placeholder="Quick Search by Patient Name..."
+                />
+                <svg
+                  class="search-icon-svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            <div id="table-placeholder" class="table-container">
+              <p>Click "Data Table" to load the cleaned data...</p>
+            </div>
+          </div>
+
+          <div id="prediction-content" class="tab-content hidden-content">
+            <p style="padding: 20px 0">Prediction content goes here...</p>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>
